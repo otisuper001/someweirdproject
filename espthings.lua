@@ -161,7 +161,7 @@ local function findObjectsInWorkspace()
 
                     part = child:FindFirstChildWhichIsA("BasePart"),
                     text = "Vehicle[?/?]",
-                    color = Color3.fromRGB(146, 134, 93),
+                    color = Color3.fromRGB(255, 255, 255),
                     textSize = 25,
                     update = function(self)
                         local vehicle = self.part.Parent
