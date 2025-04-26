@@ -11,6 +11,20 @@ local Camera = Workspace.CurrentCamera
 local objectsToShow = {}
 
 
+
+local function contructEspObject(data)
+    assert(data.part, "no part given lol")
+    return {
+
+        part = data.part,
+        text = data.text or data.part.Name,
+        color = data.color or Color3.fromRGB(255, 255, 255),
+        textSize = data.textSize or 20,
+        update = data.update or function(self) end
+
+    }
+end
+
 local ZombieSearcher = {}
 ZombieSearcher.isBlackCardZombie = function(zombieModel)
 
@@ -85,21 +99,21 @@ ZombieSearcher.search = function()
                 
                 if config.showChineseZombies then
                     if ZombieSearcher.isRedCardZombie(zombieModel) then
-                        objectsToShow[zombieModel] = {
+                        objectsToShow[zombieModel] = contructEspObject({
                             part = zombieModel.HumanoidRootPart,
                             text = "Chinese Zombie",
                             color = Color3.fromRGB(255, 0, 0),
-                        }
+                        })
                         continue
                     end
                 end
                 if config.showTacticalZombies then
                     if ZombieSearcher.isBlackCardZombie(zombieModel) then
-                        objectsToShow[zombieModel] = {
+                        objectsToShow[zombieModel] = contructEspObject({
                             part = zombieModel.HumanoidRootPart,
                             text = "Tactical Zombie",
                             color = Color3.fromRGB(0, 255, 0),
-                        }
+                        })
                         continue
                     end
                 end
@@ -121,32 +135,50 @@ local function findObjectsInWorkspace()
         end
         if config.showGrenades then
             if child.Name=="Grenade" and child:FindFirstChild("Handle") then
-                objectsToShow[child] = {
+                objectsToShow[child] = contructEspObject({
 
                     part = child.Handle,
                     text = "Grenade",
                     color = Color3.fromRGB(187, 0, 0),
 
-                }
+                })
             end
         end
         if config.showPlayerBags then
             if child.Name == "Default" and child:FindFirstChildWhichIsA("BasePart") then --Meshes/Trash_bag2_Untitled.002
-                objectsToShow[child] = {
+                objectsToShow[child] = contructEspObject({
 
                     part = child:FindFirstChildWhichIsA("BasePart"),
                     text = "Bag",
                     color = Color3.fromRGB(146, 134, 93),
 
-                }
+                })
+            end
+        end
+        if config.showVehicles then
+            if child:FindFirstChild("Chassis") then
+                objectsToShow[child] = contructEspObject({
+
+                    part = child:FindFirstChildWhichIsA("BasePart"),
+                    text = "Vehicle[?/?]",
+                    color = Color3.fromRGB(146, 134, 93),
+                    textSize = 25,
+                    update = function(self)
+                        local vehicle = self.part.Parent
+                        local states = vehicle.States
+
+                        self.text = `Vehicle[{states:GetAttribute("Health")}/{states:GetAttribute("MaxHealth")}]`
+                    end
+
+                })
             end
         end
     end
 end
 
-local function createText(txt, color)
+local function createText(txt, color, size)
     local text = Drawing.new("Text")
-    text.Size = 20
+    text.Size = size or 20
     text.Text = txt
     text.Color = color
     text.Center = true
@@ -182,7 +214,9 @@ RunService.RenderStepped:Connect(function()
             if not textUi then
                 textUi = createText(object.text, object.color)
                 object.textUi = textUi
-            end 
+            end
+            object:update()
+            textUi.Text = object.text
             textUi.Visible = true
             textUi.Position = screenPos
 
