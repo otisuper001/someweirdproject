@@ -167,7 +167,7 @@ local function findObjectsInWorkspace()
                         local vehicle = self.part.Parent
                         local states = vehicle.States
 
-                        self.text = `Vehicle[{states:GetAttribute("Health")}/{states:GetAttribute("MaxHealth")}]`
+                        self.text = `Машонка[{math.floor(states:GetAttribute("Health"))}/{states:GetAttribute("MaxHealth")}]`
                     end
 
                 })
