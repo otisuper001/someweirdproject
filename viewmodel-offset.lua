@@ -16,9 +16,11 @@ RunService.RenderStepped:Connect(function()
         for _, obj in ipairs(Camera.CurrentWeapon.Weapon:GetDescendants()) do 
             if obj:IsA("SurfaceAppearance") then
                 if obj.Name == "_coolSkin" then
-                    obj.ColorMap = config.viewmodelWeaponTexture
-                    obj.RoughnessMap = config.viewmodelWeaponTexture
-                    obj.MetalnessMap = config.viewmodelWeaponTexture
+                    if obj.ColorMap ~= config.viewmodelWeaponTexture then
+                        obj.ColorMap = config.viewmodelWeaponTexture
+                        obj.RoughnessMap = config.viewmodelWeaponTexture
+                        obj.MetalnessMap = config.viewmodelWeaponTexture
+                    end
                 else
                     local new = Instance.new("SurfaceAppearance", obj.Parent)
                     new.ColorMap = config.viewmodelWeaponTexture
