@@ -1,4 +1,4 @@
---yea thats Diddys car fly(which is really outdated) but deobsfuscated and modified
+--yea thats Diddys car fly(which is really outdated but still usable) but deobsfuscated and modified
 
 local userInputServiceName = "UserInputService"
 local starterGuiName = "StarterGui"
