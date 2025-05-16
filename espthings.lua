@@ -216,7 +216,7 @@ RunService.RenderStepped:Connect(function()
                 object.textUi = textUi
             end
             object:update()
-            textUi.Text = object.text
+            textUi.Text = object.text.."\n["..math.abs((object.part.Position - player.Character.HumanoidRootPart.Position).Magnitude).." studs]"
             textUi.Visible = true
             textUi.Position = screenPos
 
